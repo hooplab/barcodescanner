@@ -195,7 +195,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Runnable doAutoFocus = new Runnable() {
         public void run() {
             if(mCamera != null && mPreviewing && mAutoFocus && mSurfaceCreated) {
-                mCamera.autoFocus(autoFocusCB);
+                try {
+                    mCamera.autoFocus(autoFocusCB);
+                } catch (RuntimeException e) {
+                    // autoFocus failed
+                    Log.w(TAG, "" + e.getMessage());
+                    Log.w(TAG, "Ignoring...");
+                }
             }
         }
     };
