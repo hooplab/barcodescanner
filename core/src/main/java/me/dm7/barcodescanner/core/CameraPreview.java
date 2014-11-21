@@ -199,8 +199,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     mCamera.autoFocus(autoFocusCB);
                 } catch (RuntimeException e) {
                     // autoFocus failed
-                    Log.w(TAG, "" + e.getMessage());
-                    Log.w(TAG, "Ignoring...");
+                    // TODO: Actually fix this issue on Sony devices
                 }
             }
         }

@@ -88,7 +88,11 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
                 }
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
             }
-            mCamera.setParameters(parameters);
+            try {
+              mCamera.setParameters(parameters);
+            } catch(RuntimeException e) {
+              // TODO: Actually fix this issue on Sony devices.
+            }
         }
     }
 
