@@ -32,12 +32,24 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
     }
 
     public void startCamera() {
-        mCamera = CameraUtils.getCameraInstance();
-        if(mCamera != null) {
-            mViewFinderView.setupViewFinder();
-            mPreview.setCamera(mCamera, this);
-            mPreview.initCameraPreview();
-        }
+        AsyncTask<Void, Void, Camera> getCameraInstance = new AsyncTask<Void, Void, Camera>() {
+            @Override
+            protected Camera doInBackground(Void... params) {
+                mCamera = CameraUtils.getCameraInstance();
+                return mCamera;
+            }
+
+            @Override
+            protected void onPostExecute(Camera camera) {
+                if(mCamera != null) {
+                    mViewFinderView.setupViewFinder();
+                    mPreview.setCamera(mCamera, BarcodeScannerView.this);
+                    mPreview.initCameraPreview();
+                }
+            }
+        };
+
+        getCameraInstance.execute();
     }
 
     public void stopCamera() {
