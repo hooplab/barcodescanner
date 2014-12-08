@@ -118,7 +118,7 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
             try {
               mCamera.setParameters(parameters);
             } catch(RuntimeException e) {
-              // TODO: Actually fix this issue on Sony devices.
+              // TODO: Actually fix this issue on Sony devices !
             }
         }
     }
