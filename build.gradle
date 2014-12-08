@@ -104,11 +104,6 @@ subprojects {
                                     name 'Dushyanth Maguluru'
                                     email 'dushyanth.maguluru@gmail.com'
                                 }
-                                developer {
-                                    id 'no.hoopla'
-                                    name 'Hoopla AS'
-                                    email 'android@hoopla.no'
-                                }
                             }
                         }
                     }
