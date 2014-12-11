@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 public abstract class BarcodeScannerView extends FrameLayout implements Camera.PreviewCallback  {
+    private static final String TAG = "barcodescanner.core.BarcodeScannerView";
     private Camera mCamera;
     private CameraPreview mPreview;
     private IViewFinder mViewFinderView;
@@ -75,8 +77,12 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
         if(mCamera != null) {
             mPreview.stopCameraPreview();
             mPreview.setCamera(null, null);
+            Log.i(TAG, "Stopped camera");
             mCamera.release();
+            Log.i(TAG, "Released camera");
             mCamera = null;
+        } else {
+            Log.i(TAG, "Camera already stopped and released");
         }
     }
 
