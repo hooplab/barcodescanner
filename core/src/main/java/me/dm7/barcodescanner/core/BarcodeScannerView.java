@@ -6,9 +6,11 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 public abstract class BarcodeScannerView extends FrameLayout implements Camera.PreviewCallback  {
+    private static final String TAG = "barcodescanner.core.BarcodeScannerView";
     private Camera mCamera;
     private CameraPreview mPreview;
     private ViewFinderView mViewFinderView;
@@ -29,6 +31,10 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
         mViewFinderView = new ViewFinderView(getContext());
         addView(mPreview);
         addView(mViewFinderView);
+    }
+
+    public Camera getCameraInstance() {
+        return mCamera;
     }
 
     public void startCamera() {
@@ -56,8 +62,12 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
         if(mCamera != null) {
             mPreview.stopCameraPreview();
             mPreview.setCamera(null, null);
+            Log.i(TAG, "Stopped camera");
             mCamera.release();
+            Log.i(TAG, "Released camera");
             mCamera = null;
+        } else {
+            Log.i(TAG, "Camera already stopped and released");
         }
     }
 
