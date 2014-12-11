@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -17,7 +18,7 @@ import android.view.WindowManager;
 
 import java.util.List;
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
 
     private Camera mCamera;
@@ -70,7 +71,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         mSurfaceCreated = false;
-        stopCameraPreview();
+
+        if(mCamera != null) {
+            try {
+                mPreviewing = false;
+                mCamera.stopPreview();
+                mCamera.setPreviewCallback(null);
+                mCamera.release();
+            } catch (Exception e) {
+                Log.e(TAG, e.toString(), e);
+            }
+        }
     }
 
     public void showCameraPreview() {
@@ -112,7 +123,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 mCamera.cancelAutoFocus();
                 mCamera.setOneShotPreviewCallback(null);
                 mCamera.stopPreview();
-                mCamera.release();
             } catch(Exception e) {
                 Log.e(TAG, e.toString(), e);
             }
