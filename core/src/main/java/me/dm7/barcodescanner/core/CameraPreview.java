@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.util.List;
@@ -118,6 +119,7 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         mCamera.setParameters(parameters);
+        adjustViewSize(optimalSize);
     }
 
     public int getDisplayOrientation() {
@@ -151,9 +153,8 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
         }
 
         List<Camera.Size> sizes = mCamera.getParameters().getSupportedPreviewSizes();
-        Point screenResolution = DisplayUtils.getScreenResolution(getContext());
-        int w = screenResolution.x;
-        int h = screenResolution.y;
+        int w = getHolder().getSurfaceFrame().height();
+        int h = getHolder().getSurfaceFrame().width();
 
 
         final double ASPECT_TOLERANCE = 0.1;
@@ -202,6 +203,39 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
                 mCamera.cancelAutoFocus();
             }
         }
+    }
+
+    private void adjustViewSize(Camera.Size cameraSize) {
+        Point screenSize =
+                convertSizeToLandscapeOrientation(DisplayUtils.getScreenResolution(getContext()));
+        float cameraRatio = ((float) cameraSize.width) / cameraSize.height;
+        float screenRatio = ((float) screenSize.x) / screenSize.y;
+
+        if (screenRatio > cameraRatio) {
+            setViewSize((int) (screenSize.y * cameraRatio), screenSize.y);
+        } else {
+            setViewSize(screenSize.x, (int) (screenSize.x / cameraRatio));
+        }
+    }
+
+    private Point convertSizeToLandscapeOrientation(Point size) {
+        if (getDisplayOrientation() % 180 == 0) {
+            return size;
+        } else {
+            return new Point(size.y, size.x);
+        }
+    }
+
+    private void setViewSize(int width, int height) {
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (getDisplayOrientation() % 180 == 0) {
+            layoutParams.width = width;
+            layoutParams.height = height;
+        } else {
+            layoutParams.width = height;
+            layoutParams.height = width;
+        }
+        setLayoutParams(layoutParams);
     }
 
     private Runnable doAutoFocus = new Runnable() {

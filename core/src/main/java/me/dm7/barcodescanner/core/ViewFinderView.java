@@ -24,7 +24,7 @@ public class ViewFinderView extends View {
     private static final int LANDSCAPE_MAX_FRAME_HEIGHT = (int) (1080 * LANDSCAPE_HEIGHT_RATIO); // = 5/8 * 1080
 
     private static final float PORTRAIT_WIDTH_RATIO = 7f/8;
-    private static final float PORTRAIT_HEIGHT_RATIO = 3f/8;
+    private static final float PORTRAIT_HEIGHT_RATIO = 6f/8;
     private static final int PORTRAIT_MAX_FRAME_WIDTH = (int) (1080 * PORTRAIT_WIDTH_RATIO); // = 7/8 * 1080
     private static final int PORTRAIT_MAX_FRAME_HEIGHT = (int) (1920 * PORTRAIT_HEIGHT_RATIO); // = 3/8 * 1920
 
