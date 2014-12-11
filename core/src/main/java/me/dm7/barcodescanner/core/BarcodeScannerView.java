@@ -41,6 +41,9 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
         AsyncTask<Void, Void, Camera> getCameraInstance = new AsyncTask<Void, Void, Camera>() {
             @Override
             protected Camera doInBackground(Void... params) {
+                if(mCamera != null) {
+                    stopCamera();
+                }
                 mCamera = CameraUtils.getCameraInstance();
                 return mCamera;
             }

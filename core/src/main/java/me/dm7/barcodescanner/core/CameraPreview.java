@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -35,7 +36,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void setCamera(Camera camera, Camera.PreviewCallback previewCallback) {
         mCamera = camera;
         mPreviewCallback = previewCallback;
-        mAutoFocusHandler = new Handler();
+        mAutoFocusHandler = new Handler(Looper.getMainLooper());
     }
 
     public void initCameraPreview() {
@@ -95,6 +96,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 mCamera.cancelAutoFocus();
                 mCamera.setOneShotPreviewCallback(null);
                 mCamera.stopPreview();
+                mCamera.release();
             } catch(Exception e) {
                 Log.e(TAG, e.toString(), e);
             }
