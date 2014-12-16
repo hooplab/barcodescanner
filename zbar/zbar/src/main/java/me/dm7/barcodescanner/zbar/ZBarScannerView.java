@@ -112,7 +112,11 @@ public class ZBarScannerView extends BarcodeScannerView {
                 mResultHandler.handleResult(rawResult);
             }
         } else {
-            camera.setOneShotPreviewCallback(this);
+            try {
+                camera.setOneShotPreviewCallback(this);
+            } catch(RuntimeException e) {
+                // Called after release()
+            }
         }
     }
 }
