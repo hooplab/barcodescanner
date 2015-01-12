@@ -70,6 +70,8 @@ public class ZBarScannerView extends BarcodeScannerView {
         for(BarcodeFormat format : getFormats()) {
             mScanner.setConfig(format.getId(), Config.ENABLE, 1);
         }
+        this.startCamera();
+        this.stopCamera();
     }
 
     @Override
