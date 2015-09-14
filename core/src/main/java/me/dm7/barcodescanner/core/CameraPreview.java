@@ -71,17 +71,7 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         mSurfaceCreated = false;
-
-        if(mCamera != null) {
-            try {
-                mPreviewing = false;
-                mCamera.stopPreview();
-                mCamera.setPreviewCallback(null);
-                mCamera.release();
-            } catch (Exception e) {
-                Log.e(TAG, e.toString(), e);
-            }
-        }
+        stopCameraPreview();
     }
 
     public void showCameraPreview() {
