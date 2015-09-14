@@ -27,7 +27,7 @@ public class CameraUtils {
             if(c != null) {
                 c.release();
             }
-            Log.e(TAG, "EXCEPTION!: " + e.getMessage());
+            Log.e(TAG, "EXCEPTION!: " + Log.getStackTraceString(e));
             e.printStackTrace();
             // Camera is not available (in use or does not exist)
         }
