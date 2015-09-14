@@ -24,7 +24,7 @@ import me.dm7.barcodescanner.core.DisplayUtils;
 
 public class ZBarScannerView extends BarcodeScannerView {
     public interface ResultHandler {
-        public void handleResult(Result rawResult);
+        public boolean handleResult(Result rawResult);
     }
 
     static {
@@ -97,7 +97,6 @@ public class ZBarScannerView extends BarcodeScannerView {
         int result = mScanner.scanImage(barcode);
 
         if (result != 0) {
-            stopCamera();
             if(mResultHandler != null) {
                 SymbolSet syms = mScanner.getResults();
                 Result rawResult = new Result();
@@ -109,7 +108,14 @@ public class ZBarScannerView extends BarcodeScannerView {
                         break;
                     }
                 }
-                mResultHandler.handleResult(rawResult);
+                boolean continueScanning = mResultHandler.handleResult(rawResult);
+                if(continueScanning) {
+                    try {
+                        camera.setOneShotPreviewCallback(this);
+                    } catch(RuntimeException e) {
+                        // Called after release()
+                    }
+                }
             }
         } else {
             try {
