@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
@@ -124,7 +125,22 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         mCamera.setParameters(parameters);
-        adjustViewSize(optimalSize);
+        //adjustViewSize(optimalSize);
+        hooplaAdjustViewSize(optimalSize);
+    }
+
+    /**
+     * Although this results in a stretched view, it does fill it's parent.
+     *
+     * I want to find a solution where we fill in with, and crop the height (other way around in
+     * landscape) but I have not found a solution as of yet. The method below mimics behaviour of
+     * previous versions of Hoopla Beeper.
+     * 
+     * @param cameraSize
+     */
+    private void hooplaAdjustViewSize(Camera.Size cameraSize) {
+        Log.v(TAG, "FIXME: CameraSize: " + cameraSize.width + ", " + cameraSize.height);
+        setViewSize(cameraSize.width, cameraSize.height);
     }
 
     private void adjustViewSize(Camera.Size cameraSize) {
@@ -190,8 +206,15 @@ public class CameraPreview extends GLSurfaceView implements SurfaceHolder.Callba
         }
 
         List<Camera.Size> sizes = mCamera.getParameters().getSupportedPreviewSizes();
-        int w = getWidth();
-        int h = getHeight();
+        int w, h;
+        try {
+            w = ((View)this.getParent()).getWidth();
+            h = ((View)this.getParent()).getHeight();
+        } catch(Exception e) {
+            w = getWidth();
+            h = getHeight();
+        }
+
         if (DisplayUtils.getScreenOrientation(getContext()) == Configuration.ORIENTATION_PORTRAIT) {
             int portraitWidth = h;
             h = w;
